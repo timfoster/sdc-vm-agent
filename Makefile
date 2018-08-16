@@ -9,6 +9,20 @@
 #
 
 #
+# Makefile: basic Makefile for template API service
+#
+# This Makefile is a template for new repos. It contains only repo-specific
+# logic and uses included makefiles to supply common targets (javascriptlint,
+# jsstyle, restdown, etc.), which are used by other repos as well. You may well
+# need to rewrite most of this file, but you shouldn't need to touch the
+# included makefiles.
+#
+# If you find yourself adding support for new targets that could be useful for
+# other projects too, you should add these to the original versions of the
+# included Makefiles (in eng.git) so that other teams can use them too.
+#
+
+#
 # Files
 #
 JS_FILES := $(shell find {bin,lib,tests} -name '*.js')
@@ -23,21 +37,24 @@ ifeq ($(shell uname -s),SunOS)
 endif
 
 # Included definitions
-include ./tools/mk/Makefile.defs
+# XXX timf comment out during eng development
+#REQUIRE_ENG := $(shell git submodule update --init deps/eng)
+include ./deps/eng/tools/mk/Makefile.defs
+TOP ?= $(error Unable to access eng.git submodule Makefiles.)
 ifeq ($(shell uname -s),SunOS)
-	include ./tools/mk/Makefile.node_prebuilt.defs
+	include ./deps/eng/tools/mk/Makefile.node_prebuilt.defs
 else
 	NPM=npm
 	NODE=node
 	NPM_EXEC=$(shell which npm)
 	NODE_EXEC=$(shell which node)
 endif
-include ./tools/mk/Makefile.smf.defs
+include ./deps/eng/tools/mk/Makefile.smf.defs
 
 NAME :=			vm-agent
 RELEASE_TARBALL :=	$(NAME)-$(STAMP).tgz
 RELEASE_MANIFEST :=	$(NAME)-$(STAMP).manifest
-RELSTAGEDIR :=		/tmp/$(STAMP)
+RELSTAGEDIR :=		/tmp/$(NAME)-$(STAMP)
 
 #
 # Due to the unfortunate nature of npm, the Node Package Manager, there appears
@@ -123,9 +140,9 @@ dumpvar:
 	fi
 	@echo "$(VAR) is '$($(VAR))'"
 
-include ./tools/mk/Makefile.deps
+include ./deps/eng/tools/mk/Makefile.deps
 ifeq ($(shell uname -s),SunOS)
-    include ./tools/mk/Makefile.node_prebuilt.targ
+    include ./deps/eng/tools/mk/Makefile.node_prebuilt.targ
 endif
-include ./tools/mk/Makefile.smf.targ
-include ./tools/mk/Makefile.targ
+include ./deps/eng/tools/mk/Makefile.smf.targ
+include ./deps/eng/tools/mk/Makefile.targ
