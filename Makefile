@@ -109,7 +109,7 @@ release: all deps docs $(SMF_MANIFESTS)
 	    $(RELSTAGEDIR)/$(NAME)/node/include \
 	    $(RELSTAGEDIR)/$(NAME)/node/lib/node_modules \
 	    $(RELSTAGEDIR)/$(NAME)/node/share
-	cd $(RELSTAGEDIR) && $(TAR) -zcf $(TOP)/$(RELEASE_TARBALL) *
+	cd $(RELSTAGEDIR) && $(TAR) -I pigz -cf $(TOP)/$(RELEASE_TARBALL) *
 	cat $(TOP)/manifest.tmpl | sed \
 	    -e "s/UUID/$$(cat $(RELSTAGEDIR)/$(NAME)/image_uuid)/" \
 	    -e "s/NAME/$$(json name < $(TOP)/package.json)/" \
