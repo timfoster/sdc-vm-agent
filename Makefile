@@ -72,8 +72,8 @@ RUN_NPM_INSTALL =	$(NPM_ENV) $(NPM) install
 .PHONY: all
 all: $(SMF_MANIFESTS) | $(NPM_EXEC) $(REPO_DEPS)
 	$(RUN_NPM_INSTALL)
-	./node_modules/.bin/kthxbai || true # work around trentm/node-kthxbai#1
-	./node_modules/.bin/kthxbai
+	$(NODE) ./node_modules/.bin/kthxbai || true # work around trentm/node-kthxbai#1
+	$(NODE) ./node_modules/.bin/kthxbai
 
 .PHONY: test
 test:
